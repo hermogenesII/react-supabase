@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
-import { supabase } from "../lib/supabase/supabaseClient";
+import { useUser } from "../hooks/useUser";
 
 const ProtectedRoute = ({ children }: { children: React.JSX.Element }) => {
-  const [user, setUser] = useState<any>(undefined);
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-  }, []);
+  const user = useUser();
+  console.log("user: ", user);
 
   if (user === undefined) return <p>Loading...</p>;
   if (!user) return <Navigate to="/login" />;

@@ -1,6 +1,7 @@
 // src/components/PostForm.tsx
 import { useState } from "react";
 import { supabase } from "../lib/supabase/supabaseClient";
+import { insertPost } from "../lib/queries/userQueries";
 
 const PostForm = ({ onPostCreated }: { onPostCreated: () => void }) => {
   const [title, setTitle] = useState("");
@@ -15,17 +16,13 @@ const PostForm = ({ onPostCreated }: { onPostCreated: () => void }) => {
 
     if (!user) return alert("You must be logged in");
 
-    const { error } = await supabase.from("posts").insert({
-      title,
-      content,
-      user_id: user.id,
-    });
-
-    if (error) alert(error.message);
-    else {
+    try {
+      await insertPost({ title, content, user_id: user.id });
       setTitle("");
       setContent("");
       onPostCreated();
+    } catch (error: any) {
+      alert(error.message);
     }
   };
 

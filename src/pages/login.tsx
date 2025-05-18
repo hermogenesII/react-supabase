@@ -23,6 +23,9 @@ const LoginPage: React.FC = () => {
     setLoading(true);
     setError("");
 
+    console.log("Logging in with email: ", email);
+    console.log("Logging in with password: ", password);
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
